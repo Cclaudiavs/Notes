@@ -1,6 +1,6 @@
-import { AuthProvider } from './context/AuthContext'
-import './App.css'
-import FormsFirebase from '../src/components/FormsFirebase'
+import { AuthProvider } from './context/AuthContext';
+import './App.css';
+import FormsFirebase from '../src/components/FormsFirebase';
 
 function App() {
   return (
@@ -13,4 +13,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
