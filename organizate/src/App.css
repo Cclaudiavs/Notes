@@ -11,8 +11,10 @@
 
 }
 
-h1 {
-  margin-top: 0%;
+.encabezado {
+  margin-top: 0;
+  font-size: 13px;
+
 }
 
 .app {
@@ -61,4 +63,14 @@ button {
 
 p {
   text-align: center;
+}
+
+.logo {
+  max-width: 30px;
+}
+
+.button {
+  display: flex;
+  margin-top: 10px;
+  justify-content: center;
 }

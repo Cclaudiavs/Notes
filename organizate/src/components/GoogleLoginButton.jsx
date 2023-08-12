@@ -1,8 +1,8 @@
-
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography"; // Importa el componente Typography
 
 const GoogleLoginButton = ({ onError }) => {
     const auth = useAuth();
@@ -19,20 +19,38 @@ const GoogleLoginButton = ({ onError }) => {
     };
 
     return (
-        <div>
+        <div className="button">
             {isAuthenticated ? (
                 <Link to={`/home`}>
                     <Button variant="contained">Ir a Home</Button>
                 </Link>
             ) : (
-                <Button variant="contained" onClick={handleGoogleLogin}>Iniciar sesión con Google</Button>
+                <Button
+                    variant="contained"
+                    onClick={handleGoogleLogin}
+                    style={{
+                        background: "none",
+                        border: "1px solid #ccc",
+                        padding: "6px 16px",
+                        display: "flex",
+                    }}>
+                    {/* Utiliza el componente Typography para el texto */}
+                    <Typography style={{
+                        color: "black",
+                        marginRight: "10px"
+                    }}>Ingresá con</Typography>
+                    <img
+                        className="logo"
+                        src="../imagenes/google.png"
+                        alt="Google Logo"
+                    />
+                </Button>
             )}
         </div>
     );
 };
 
 export { GoogleLoginButton };
-
 
 
 

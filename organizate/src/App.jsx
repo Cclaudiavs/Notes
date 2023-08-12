@@ -6,7 +6,9 @@ function App() {
   return (
     <AuthProvider>
       <div className='contenedorTotal'>
-        <h1>Organizate</h1>
+        <div className='encabezado'>
+          <h1>Organiza-"Te"</h1>
+        </div>
         <FormsFirebase />
       </div>
     </AuthProvider>
