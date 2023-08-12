@@ -5,8 +5,8 @@ import FormsFirebase from '../src/components/FormsFirebase';
 function App() {
   return (
     <AuthProvider>
-      <div>
-        <h1>hola</h1>
+      <div className='contenedorTotal'>
+        <h1>Organizate</h1>
         <FormsFirebase />
       </div>
     </AuthProvider>
