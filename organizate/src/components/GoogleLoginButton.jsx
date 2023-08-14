@@ -8,9 +8,11 @@ const GoogleLoginButton = ({ onError }) => {
     const auth = useAuth();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    const handleGoogleLogin = async () => {
+    const handleGoogleLogin = async (e) => {
+        e.preventDefault()
+        auth.loginWithGoogle();
+
         try {
-            await auth.loginWithGoogle();
             setIsAuthenticated(true);
         } catch (error) {
             console.log(error);
@@ -27,7 +29,7 @@ const GoogleLoginButton = ({ onError }) => {
             ) : (
                 <Button
                     variant="contained"
-                    onClick={handleGoogleLogin}
+                    onClick={(e) => handleGoogleLogin(e)}
                     style={{
                         background: "none",
                         border: "1px solid #ccc",

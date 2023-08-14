@@ -1,15 +1,22 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 
-function LoginForm({ handleLogin }) {
+function LoginForm({ handleLogin, loginError }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await handleLogin(email, password);
+
+        try {
+            await handleLogin(email, password);
+        } catch (error) {
+            // El manejo del error ahora se realiza en el componente padre FormsFirebase
+        }
+
     };
+
 
     return (
         <form className="form" onSubmit={handleSubmit}>
@@ -31,9 +38,9 @@ function LoginForm({ handleLogin }) {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
-                <Link to={`/home`}>
-                    <Button variant="contained" onClick={handleLogin}>Ingresar</Button>
-                </Link>
+                {loginError && <p style={{ color: 'red' }}>{loginError}</p>}
+                <Button variant="contained" type="submit">Ingresar</Button>
+
             </div>
         </form>
     );
