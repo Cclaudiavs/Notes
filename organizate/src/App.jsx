@@ -1,5 +1,6 @@
 import { AuthProvider } from './context/AuthContext';
 import './App.css';
+import '@mui/material/styles';
 import FormsFirebase from '../src/components/FormsFirebase';
 
 function App() {
