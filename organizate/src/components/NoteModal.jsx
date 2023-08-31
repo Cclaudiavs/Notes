@@ -1,24 +1,21 @@
+
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
-import Button from '@mui/material/Button'; // Importar el componente Button de Material-UI
+import Button from '@mui/material/Button';
 
 Modal.setAppElement('#root');
 
-function NoteModal({ day, onDeleteNote }) {
+function NoteModal({ onDeleteNote }) {
     const [note, setNote] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
-        const isValidDate = day <= 31;
-        if (!isValidDate) {
-            return;
-        }
-
-        const storedNote = localStorage.getItem(`note_${day}`);
+        // Obtener la nota almacenada sin una fecha específica
+        const storedNote = localStorage.getItem('note_general');
         if (storedNote) {
             setNote(JSON.parse(storedNote));
         }
-    }, [day]);
+    }, []);
 
     useEffect(() => {
         if (note) {
@@ -31,16 +28,18 @@ function NoteModal({ day, onDeleteNote }) {
     };
 
     const handleDeleteNote = () => {
-        localStorage.removeItem(`note_${day}`);
+        localStorage.removeItem(`note_${new Date().toISOString()}`);
         setNote(null);
         setIsOpen(false);
         onDeleteNote(); // Emitir el evento para actualizar la lista de notas en Home
     };
 
+
+
     return (
         <>
             <Modal isOpen={isOpen} onRequestClose={closeModal}>
-                {/* Renderizado del contenido del modal */}
+                {/* Aquí puedes mostrar el contenido del modal */}
             </Modal>
             {note && (
                 <Button variant="outlined" color="secondary" onClick={handleDeleteNote}>
@@ -51,5 +50,5 @@ function NoteModal({ day, onDeleteNote }) {
     );
 }
 
-
 export { NoteModal };
+

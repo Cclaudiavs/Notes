@@ -1,21 +1,17 @@
+
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
-function CustomModal({ isOpen, onClose, onSubmit, currentNote }) {
+function CustomModal({ isOpen, onClose, onSubmit }) {
     const [noteTitle, setNoteTitle] = useState('');
     const [noteContent, setNoteContent] = useState('');
 
     useEffect(() => {
-        if (currentNote) {
-            setNoteTitle(currentNote.title);
-            setNoteContent(currentNote.content);
-        } else {
-            setNoteTitle('');
-            setNoteContent('');
-        }
-    }, [currentNote]);
+        setNoteTitle('');
+        setNoteContent('');
+    }, [isOpen]); // Limpiar campos cuando se abra el modal
 
     const handleTitleChange = (e) => {
         setNoteTitle(e.target.value);
@@ -26,9 +22,10 @@ function CustomModal({ isOpen, onClose, onSubmit, currentNote }) {
     };
 
     const handleSubmit = () => {
-        onSubmit(noteTitle, noteContent);
+        onSubmit(noteTitle, noteContent); // Guarda la nota sin fecha
         onClose();
     };
+
 
     return (
         <Modal
@@ -37,7 +34,7 @@ function CustomModal({ isOpen, onClose, onSubmit, currentNote }) {
             contentLabel="Crear Nota"
         >
             <h2>Crear Nota</h2>
-            <label htmlFor="noteTitle">Título:</label>
+            <label htmlFor="noteTitle">Fecha:</label>
             <input
                 type="text"
                 id="noteTitle"
@@ -55,4 +52,7 @@ function CustomModal({ isOpen, onClose, onSubmit, currentNote }) {
         </Modal>
     );
 }
+
 export { CustomModal };
+
+

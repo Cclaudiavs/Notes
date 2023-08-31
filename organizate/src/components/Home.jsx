@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import Calendar from 'react-calendar';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { CustomModal } from './CustomModal';
@@ -15,6 +16,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 function Home() {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [notes, setNotes] = useState(JSON.parse(localStorage.getItem('notes')) || {});
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentNote, setCurrentNote] = useState(null);
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -28,11 +30,8 @@ function Home() {
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const dateKey = `${year}-${month}-${day}`;
-        const note = notes[dateKey];
+        const formattedDate = date.toISOString().split('T')[0];
+        const note = notes[formattedDate];
         if (note) {
             setCurrentNote(note);
             setIsModalOpen(true);
@@ -57,26 +56,31 @@ function Home() {
         setIsModalOpen(false);
     };
 
-    const handleSubmitNote = (noteTitle, noteContent) => {
-        const year = selectedDate.getFullYear();
-        const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
-        const day = String(selectedDate.getDate()).padStart(2, '0');
-        const dateKey = `${year}-${month}-${day}`;
-        const newNote = { title: noteTitle, content: noteContent };
 
-        setNotes(prevNotes => ({
-            ...prevNotes,
-            [dateKey]: newNote,
-        }));
 
-        closeModal();
-    };
+
+
 
     const handleDeleteNoteInHome = (dateKey) => {
         // Abrir ventana emergente para confirmar borrado
         setNoteToDelete(dateKey);
         setDeleteConfirmOpen(true);
     };
+
+
+    const handleSubmitNote = (noteTitle, noteContent) => {
+        const newNote = { title: noteTitle, content: noteContent };
+
+        setNotes(prevNotes => ({
+            ...prevNotes,
+            [new Date().toISOString()]: newNote,
+        }));
+
+        closeModal();
+    };
+
+
+
 
     const handleDeleteConfirm = () => {
         // Cierre de la ventana emergente de confirmación
@@ -102,25 +106,25 @@ function Home() {
     return (
         <div className="home-container">
             <h2>Organiza-"Te"</h2>
+            <div><button onClick={handleLogout}>Cerrar sesión</button></div>
             <div className="current-date">
-                {selectedDate.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                <DatePicker
+                    selected={selectedDate}
+                    onChange={handleDateChange}
+                    minDate={new Date()}
+                    dateFormat="yyyy-MM-dd"
+                    showWeekNumbers
+                    inline
+                />
             </div>
-            <button onClick={handleLogout}>Cerrar sesión</button>
+
             <button onClick={openModal}>Crear Nota</button>
-            <Calendar
-                className="calendar"
-                onChange={handleDateChange}
-                value={selectedDate}
-                minDate={new Date()}
-                calendarType="US"
-                returnValue="start"
-                view="month"
-                tileContent={renderTileContent}
-            />
+
             <div className="notes-container">
                 {Object.keys(notes).map(dateKey => (
                     <div className="note-item" key={dateKey}>
-                        <h3>{new Date(dateKey).toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h3>
+                        <h3>{new Date(dateKey).toLocaleDateString('es-AR', { year: 'numeric', month: 'long' })}</h3>
+
                         <h4>{notes[dateKey].title}</h4>
                         <p>{notes[dateKey].content}</p>
                         <Button variant="outlined" color="secondary" onClick={() => handleDeleteNoteInHome(dateKey)}>
@@ -129,8 +133,14 @@ function Home() {
                     </div>
                 ))}
             </div>
+
+
+
             <CustomModal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmitNote} currentNote={currentNote} />
+
+
             <NoteModal onDeleteNote={handleDeleteNoteInHome} />
+
 
             <Dialog
                 open={deleteConfirmOpen}
