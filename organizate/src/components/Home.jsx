@@ -105,8 +105,13 @@ function Home() {
     const renderTileContent = () => null;
     return (
         <div className="home-container">
+
             <h2>Organiza-"Te"</h2>
-            <div><button onClick={handleLogout}>Cerrar sesión</button></div>
+            <div className='logout-button'>
+                <button
+
+                    onClick={handleLogout}>Cerrar sesión</button>
+            </div>
             <div className="current-date">
                 <DatePicker
                     selected={selectedDate}
@@ -121,6 +126,7 @@ function Home() {
             <button onClick={openModal}>Crear Nota</button>
 
             <div className="notes-container">
+
                 {Object.keys(notes).map(dateKey => (
                     <div className="note-item" key={dateKey}>
                         <h3>{new Date(dateKey).toLocaleDateString('es-AR', { year: 'numeric', month: 'long' })}</h3>

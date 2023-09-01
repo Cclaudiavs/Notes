@@ -34,12 +34,26 @@ function NoteModal({ onDeleteNote }) {
         onDeleteNote(); // Emitir el evento para actualizar la lista de notas en Home
     };
 
-
+    const modalContentStyle = {
+        maxHeight: '80vh', // Establecer una altura máxima para el contenido
+        overflowY: 'auto', // Agregar scroll si el contenido excede la altura máxima
+    };
 
     return (
         <>
+
             <Modal isOpen={isOpen} onRequestClose={closeModal}>
                 {/* Aquí puedes mostrar el contenido del modal */}
+                <div style={modalContentStyle}>
+                    {/* Contenido del modal con scroll */}
+                    {/* Por ejemplo, muestra el título y el contenido de la nota */}
+                    {note && (
+                        <div>
+                            <h2>{note.title}</h2>
+                            <p>{note.content}</p>
+                        </div>
+                    )}
+                </div>
             </Modal>
             {note && (
                 <Button variant="outlined" color="secondary" onClick={handleDeleteNote}>
