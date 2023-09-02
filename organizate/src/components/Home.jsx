@@ -21,6 +21,9 @@ function Home() {
     const [currentNote, setCurrentNote] = useState(null);
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [noteToDelete, setNoteToDelete] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchedNote, setSearchedNote] = useState(null);
+
     const auth = useAuth();
     const navigate = useNavigate();
 
@@ -56,8 +59,28 @@ function Home() {
         setIsModalOpen(false);
     };
 
+    const handleSearch = () => {
+        const foundNote = notes[searchQuery];
+        if (foundNote) {
+            setSearchedNote(foundNote);
+        } else {
+            setSearchedNote(null); // Nota no encontrada, establece el estado en null
+        }
+    };
 
-
+    // Filtrar notas basadas en la consulta de búsqueda
+    const filteredNotes = Object.keys(notes)
+        .filter(dateKey => {
+            const note = notes[dateKey];
+            return (
+                note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                note.content.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        })
+        .reduce((filtered, dateKey) => {
+            filtered[dateKey] = notes[dateKey];
+            return filtered;
+        }, {});
 
 
 
@@ -105,13 +128,13 @@ function Home() {
     const renderTileContent = () => null;
     return (
         <div className="home-container">
-
-            <h2>Organiza-"Te"</h2>
             <div className='logout-button'>
                 <button
 
                     onClick={handleLogout}>Cerrar sesión</button>
             </div>
+            <h2>Organiza-"Te"</h2>
+
             <div className="current-date">
                 <DatePicker
                     selected={selectedDate}
@@ -121,23 +144,42 @@ function Home() {
                     showWeekNumbers
                     inline
                 />
-            </div>
 
+            </div>
+            {/* Campo de búsqueda */}
+            <div className="search-bar">
+                <input
+                    type="text"
+                    placeholder="Buscar por nota..."
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    value={searchQuery}
+                />
+                <button onClick={handleSearch}>Buscar</button>
+            </div>
             <button onClick={openModal}>Crear Nota</button>
 
             <div className="notes-container">
+                {Object.keys(notes).map(dateKey => {
+                    const note = notes[dateKey];
+                    const isNoteVisible = !searchQuery || // Mostrar todas las notas si no hay una búsqueda
+                        (note.title.toLowerCase().includes(searchQuery.toLowerCase()) || // Mostrar si la búsqueda coincide con el título
+                            note.content.toLowerCase().includes(searchQuery.toLowerCase())); // Mostrar si la búsqueda coincide con el contenido
 
-                {Object.keys(notes).map(dateKey => (
-                    <div className="note-item" key={dateKey}>
-                        <h3>{new Date(dateKey).toLocaleDateString('es-AR', { year: 'numeric', month: 'long' })}</h3>
-
-                        <h4>{notes[dateKey].title}</h4>
-                        <p>{notes[dateKey].content}</p>
-                        <Button variant="outlined" color="secondary" onClick={() => handleDeleteNoteInHome(dateKey)}>
-                            Borrar Nota
-                        </Button>
-                    </div>
-                ))}
+                    if (isNoteVisible) {
+                        return (
+                            <div className="note-item" key={dateKey}>
+                                <h3>{new Date(dateKey).toLocaleDateString('es-AR', { year: 'numeric', month: 'long' })}</h3>
+                                <h4>{note.title}</h4>
+                                <p>{note.content}</p>
+                                <Button variant="outlined" color="secondary" onClick={() => handleDeleteNoteInHome(dateKey)}>
+                                    Borrar Nota
+                                </Button>
+                            </div>
+                        );
+                    } else {
+                        return null; // No mostrar la nota si no coincide con la búsqueda
+                    }
+                })}
             </div>
 
 
