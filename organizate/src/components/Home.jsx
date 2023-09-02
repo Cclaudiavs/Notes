@@ -149,6 +149,7 @@ function Home() {
             {/* Campo de búsqueda */}
             <div className="search-bar">
                 <input
+                    className="input"
                     type="text"
                     placeholder="Buscar por nota..."
                     onChange={(e) => setSearchQuery(e.target.value)}
