@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography"; // Importa el componente Typography
+import logoIMG from '../img/google.png';
 
 const GoogleLoginButton = ({ onError }) => {
     const auth = useAuth();
@@ -43,7 +44,7 @@ const GoogleLoginButton = ({ onError }) => {
                     }}>Ingresá con</Typography>
                     <img
                         className="logo"
-                        src="../imagenes/google.png"
+                        src={logoIMG}
                         alt="Google Logo"
                     />
                 </Button>
