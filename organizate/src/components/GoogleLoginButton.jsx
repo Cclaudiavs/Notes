@@ -41,7 +41,7 @@ const GoogleLoginButton = ({ onError }) => {
                     <Typography style={{
                         color: "black",
                         marginRight: "10px"
-                    }}>Ingresá con</Typography>
+                    }}>Ingresá con Google</Typography>
                     <img
                         className="logo"
                         src={logoIMG}
